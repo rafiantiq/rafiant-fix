@@ -12,12 +12,14 @@ jobs:
       - uses: gradle/gradle-build-action@v2
       - name: Build WebView AAB
         run: |
-          if [! -f "./gradlew" ]; then gradle wrapper; fi
+          if [! -f "./gradlew" ]; then
+            gradle wrapper
+          fi
           chmod +x gradlew
           cp signing.keystore app/signing.keystore
-          STORE_PASS=$(grep storePassword signing-key-info.txt | cut -d'=' -f2 | tr -d '\r')
-          KEY_ALIAS=$(grep keyAlias signing-key-info.txt | cut -d'=' -f2 | tr -d '\r')
-          KEY_PASS=$(grep keyPassword signing-key-info.txt | cut -d'=' -f2 | tr -d '\r')
+          STORE_PASS=$(grep storePassword signing-key-info.txt | cut -d'=' -f2 | tr -d '\r' | xargs)
+          KEY_ALIAS=$(grep keyAlias signing-key-info.txt | cut -d'=' -f2 | tr -d '\r' | xargs)
+          KEY_PASS=$(grep keyPassword signing-key-info.txt | cut -d'=' -f2 | tr -d '\r' | xargs)
          ./gradlew bundleRelease -PstoreFile=signing.keystore -PstorePassword=$STORE_PASS -PkeyAlias=$KEY_ALIAS -PkeyPassword=$KEY_PASS
       - name: Upload AAB
         uses: actions/upload-artifact@v4
