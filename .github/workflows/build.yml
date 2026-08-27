@@ -12,7 +12,7 @@ jobs:
       - uses: gradle/gradle-build-action@v2
       - name: Build WebView AAB
         run: |
-          if [ ! -f "./gradlew" ]; then
+          if [! -f "./gradlew" ]; then
             gradle wrapper
           fi
           chmod +x gradlew
